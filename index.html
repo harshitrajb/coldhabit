@@ -573,27 +573,34 @@ function submitEmail(){
   if(submittedEmails[val]){
     errEl.textContent='Already on the list.';errEl.style.display='block';return;
   }
-  // Submit to Zoho Forms via fetch
-  var formData=new FormData();
-  formData.append('Email',val);
-  fetch('https://forms.zohopublic.in/connectcold1/form/Waitlist/formperma/5JeU9k2vmtIQDl5IeJ1bPKAdPWeN64rSMRnknglqhaI',{
-    method:'POST',
-    body:formData,
-    mode:'no-cors'
-  }).then(function(){
-    submittedEmails[val]=true;
-    document.getElementById('formArea').style.display='none';
-    document.getElementById('confirmState').classList.add('show');
-    document.getElementById('badge').style.display='none';
-    window._submitted=true;
-  }).catch(function(){
-    // no-cors always resolves, but just in case
-    submittedEmails[val]=true;
-    document.getElementById('formArea').style.display='none';
-    document.getElementById('confirmState').classList.add('show');
-    document.getElementById('badge').style.display='none';
-    window._submitted=true;
-  });
+  
+  // Create hidden iframe to capture Zoho redirect
+  var iframe=document.createElement('iframe');
+  iframe.name='zoho-target';
+  iframe.style.display='none';
+  document.body.appendChild(iframe);
+
+  // Create hidden form and submit to Zoho
+  var form=document.createElement('form');
+  form.method='POST';
+  form.action='https://forms.zohopublic.in/connectcold1/form/Waitlist/formperma/5JeU9k2vmtIQDl5IeJ1bPKAdPWeN64rSMRnknglqhaI';
+  form.target='zoho-target';
+
+  var field=document.createElement('input');
+  field.type='hidden';
+  field.name='Email';
+  field.value=val;
+  form.appendChild(field);
+
+  document.body.appendChild(form);
+  form.submit();
+
+  // Show confirmation
+  submittedEmails[val]=true;
+  document.getElementById('formArea').style.display='none';
+  document.getElementById('confirmState').classList.add('show');
+  document.getElementById('badge').style.display='none';
+  window._submitted=true;
 }
 document.getElementById('submitBtn').addEventListener('click',submitEmail);
 document.getElementById('emailInput').addEventListener('keydown',function(e){if(e.key==='Enter')submitEmail();});
