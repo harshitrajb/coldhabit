@@ -318,12 +318,16 @@ html,body{width:100%;height:100%;overflow:hidden;touch-action:none;background:#1
             <div id="formArea" style="display:flex;flex-direction:column;align-items:center;width:100%;">
               <form 
                 id="zohoForm"
-                action="https://forms.zohopublic.in/connectcold1/form/Waitlist/formperma/94CRYz8isKr1hnOoYRtGA0fYYu-f8pgsHDMpdykzekA/htmlRecords/submit"                method="POST"
+                action="https://forms.zohopublic.in/connectcold1/form/Waitlist/formperma/94CRYz8isKr1hnOoYRtGA0fYYu-f8pgsHDMpdykzekA/htmlRecords/submit"
+                method="POST"
                 target="hidden_iframe">
+                <input type="hidden" name="zf_referrer_name" value="">
+                <input type="hidden" name="zf_redirect_url" value="">
+                <input type="hidden" name="zc_gad" value="">
                 <div class="erow">
                   <input 
                     class="einput" 
-                    id="emailInput" 
+                    id="emailInput"
                     type="email" 
                     name="Email"
                     placeholder="your@email.com" 
@@ -589,10 +593,10 @@ document.getElementById('zohoForm').addEventListener('submit', function(e) {
     return;
   }
 
-  // Submit to Zoho
+  // submit to Zoho
   this.submit();
 
-  // Show confirmation UI
+  // UI animation
   document.getElementById('formArea').style.display = 'none';
   document.getElementById('confirmState').classList.add('show');
   document.getElementById('badge').style.display = 'none';
