@@ -316,10 +316,25 @@ html,body{width:100%;height:100%;overflow:hidden;touch-action:none;background:#1
           </p>
           <div class="anim-item hero-form-wrap">
             <div id="formArea" style="display:flex;flex-direction:column;align-items:center;width:100%;">
-              <div class="erow">
-                <input class="einput" id="emailInput" type="email" placeholder="your@email.com"/>
-                <button class="sbtn" id="submitBtn">Join the Habit</button>
-              </div>
+              <form 
+                id="zohoForm"
+                action="https://forms.zohopublic.in/connectcold1/form/Waitlist/formperma/5JeU9k2vmtIQDl5IeJ1bPKAdPWeN64rSMRnknglqhaI"
+                method="POST"
+                target="hidden_iframe">
+                <div class="erow">
+                  <input 
+                    class="einput" 
+                    id="emailInput" 
+                    type="email" 
+                    name="Your Email"
+                    placeholder="your@email.com" 
+                    required/>
+                  <button class="sbtn" type="submit">
+                    Join the Habit
+                  </button>
+                </div>
+              </form>
+              <iframe name="hidden_iframe" style="display:none;"></iframe>
               <div class="eerr" id="emailErr"></div>
               <div class="ehint">No spam. Ever. Just the launch.</div>
             </div>
@@ -562,48 +577,27 @@ window.addEventListener('touchend',function(e){var d=ty-e.changedTouches[0].clie
 
 window.addEventListener('keydown',function(e){if(e.key==='ArrowDown'||e.key==='PageDown'){e.preventDefault();goTo(cur+1);}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();goTo(cur-1);}});
 
-var submittedEmails={};
-function submitEmail(){
-  var input=document.getElementById('emailInput');
-  var errEl=document.getElementById('emailErr');
-  var val=input.value.trim().toLowerCase();
-  if(val.indexOf('@')===-1||val.indexOf('.')===-1){
-    errEl.textContent='Enter a valid email address.';errEl.style.display='block';return;
+document.getElementById('zohoForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  var input = document.getElementById('emailInput');
+  var errEl = document.getElementById('emailErr');
+  var val = input.value.trim().toLowerCase();
+
+  if(val.indexOf('@') === -1 || val.indexOf('.') === -1){
+    errEl.textContent = 'Enter a valid email address.';
+    errEl.style.display = 'block';
+    return;
   }
-  if(submittedEmails[val]){
-    errEl.textContent='Already on the list.';errEl.style.display='block';return;
-  }
-  
-  // Create hidden iframe to capture Zoho redirect
-  var iframe=document.createElement('iframe');
-  iframe.name='zoho-target';
-  iframe.style.display='none';
-  document.body.appendChild(iframe);
 
-  // Create hidden form and submit to Zoho
-  var form=document.createElement('form');
-  form.method='POST';
-  form.action='https://forms.zohopublic.in/connectcold1/form/Waitlist/formperma/5JeU9k2vmtIQDl5IeJ1bPKAdPWeN64rSMRnknglqhaI';
-  form.target='zoho-target';
+  // Submit to Zoho
+  this.submit();
 
-  var field=document.createElement('input');
-  field.type='hidden';
-  field.name='Email';
-  field.value=val;
-  form.appendChild(field);
-
-  document.body.appendChild(form);
-  form.submit();
-
-  // Show confirmation
-  submittedEmails[val]=true;
-  document.getElementById('formArea').style.display='none';
+  // Show confirmation UI
+  document.getElementById('formArea').style.display = 'none';
   document.getElementById('confirmState').classList.add('show');
-  document.getElementById('badge').style.display='none';
-  window._submitted=true;
-}
-document.getElementById('submitBtn').addEventListener('click',submitEmail);
-document.getElementById('emailInput').addEventListener('keydown',function(e){if(e.key==='Enter')submitEmail();});
+  document.getElementById('badge').style.display = 'none';
+  window._submitted = true;});
 
 var openFaq=null;
 var fqBtns=document.querySelectorAll('.fq');
