@@ -581,26 +581,27 @@ window.addEventListener('touchend',function(e){var d=ty-e.changedTouches[0].clie
 window.addEventListener('keydown',function(e){if(e.key==='ArrowDown'||e.key==='PageDown'){e.preventDefault();goTo(cur+1);}if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();goTo(cur-1);}});
 
 document.getElementById('zohoForm').addEventListener('submit', function(e) {
-  e.preventDefault();
 
   var input = document.getElementById('emailInput');
   var errEl = document.getElementById('emailErr');
   var val = input.value.trim().toLowerCase();
 
   if(val.indexOf('@') === -1 || val.indexOf('.') === -1){
+    e.preventDefault();
     errEl.textContent = 'Enter a valid email address.';
     errEl.style.display = 'block';
     return;
   }
 
-  // submit to Zoho
-  this.submit();
+  // DO NOT prevent default here
+  // Let Zoho handle submission naturally
 
-  // UI animation
-  document.getElementById('formArea').style.display = 'none';
-  document.getElementById('confirmState').classList.add('show');
-  document.getElementById('badge').style.display = 'none';
-  window._submitted = true;});
+  setTimeout(function(){
+    document.getElementById('formArea').style.display = 'none';
+    document.getElementById('confirmState').classList.add('show');
+    document.getElementById('badge').style.display = 'none';
+    window._submitted = true;
+  }, 500);});
 
 var openFaq=null;
 var fqBtns=document.querySelectorAll('.fq');
